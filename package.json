@@ -9,7 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run src scripts",
-    "test:db": "vitest run tests/integration",
+    "test:db": "vitest run tests/integration --no-file-parallelism --testTimeout 30000",
     "seed": "tsx scripts/seed-demo.ts",
     "format": "prettier --write ."
   },
