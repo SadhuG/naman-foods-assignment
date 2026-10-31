@@ -29,7 +29,10 @@ export function anon(): SupabaseClient {
   return createClient(url, anonKey, noSession);
 }
 
-async function signedIn(email: string, password: string): Promise<SupabaseClient> {
+async function signedIn(
+  email: string,
+  password: string,
+): Promise<SupabaseClient> {
   const client = createClient(url, anonKey, noSession);
   const { error } = await client.auth.signInWithPassword({ email, password });
   if (error) throw error;
@@ -66,7 +69,12 @@ export async function hr(): Promise<SupabaseClient> {
   return signedIn(email, password);
 }
 
-export const ROUND_NAMES = ["Screening", "Aptitude Test", "Technical Interview", "HR Interview"];
+export const ROUND_NAMES = [
+  "Screening",
+  "Aptitude Test",
+  "Technical Interview",
+  "HR Interview",
+];
 
 export async function makeDrive(
   opts: { rounds?: number; status?: "open" | "closed" } = {},
@@ -106,8 +114,14 @@ export const PROFILE = {
 };
 
 /** Apply as `client` and return the candidate id (throws on error). */
-export async function apply(client: SupabaseClient, slug: string): Promise<string> {
-  const { data, error } = await client.rpc("apply_to_drive", { p_slug: slug, ...PROFILE });
+export async function apply(
+  client: SupabaseClient,
+  slug: string,
+): Promise<string> {
+  const { data, error } = await client.rpc("apply_to_drive", {
+    p_slug: slug,
+    ...PROFILE,
+  });
   if (error) throw error;
   return data as string;
 }
@@ -116,7 +130,10 @@ export async function setStatus(
   candidateId: string,
   patch: { status?: string; current_round?: number },
 ): Promise<void> {
-  const { error } = await admin().from("candidates").update(patch).eq("id", candidateId);
+  const { error } = await admin()
+    .from("candidates")
+    .update(patch)
+    .eq("id", candidateId);
   if (error) throw error;
 }
 
@@ -149,7 +166,10 @@ export async function cleanup(): Promise<void> {
   const db = admin();
   await db.from("drives").delete().like("slug", "test-%");
   for (let page = 1; ; page++) {
-    const { data, error } = await db.auth.admin.listUsers({ page, perPage: 1000 });
+    const { data, error } = await db.auth.admin.listUsers({
+      page,
+      perPage: 1000,
+    });
     if (error) throw error;
     const victims = data.users.filter(
       (u) => u.email?.startsWith("test+") && u.email.endsWith("@example.com"),

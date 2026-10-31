@@ -22,7 +22,11 @@ describe.skipIf(!hasDb)("candidate functions", () => {
     const id = await apply(me.client, drive.slug);
     expect(id).toMatch(/^[0-9a-f-]{36}$/);
 
-    const { data: row } = await admin().from("candidates").select("*").eq("id", id).single();
+    const { data: row } = await admin()
+      .from("candidates")
+      .select("*")
+      .eq("id", id)
+      .single();
     expect(row.email).toBe(me.email.toLowerCase());
     expect(row.user_id).toBe(me.userId);
     expect(row.status).toBe("active");
@@ -41,7 +45,10 @@ describe.skipIf(!hasDb)("candidate functions", () => {
     const drive = await makeDrive();
     const me = await newCandidate();
     await apply(me.client, drive.slug);
-    const { error } = await me.client.rpc("apply_to_drive", { p_slug: drive.slug, ...PROFILE });
+    const { error } = await me.client.rpc("apply_to_drive", {
+      p_slug: drive.slug,
+      ...PROFILE,
+    });
     expect(error?.message).toBe("already_applied");
     const { count } = await admin()
       .from("candidates")
@@ -53,15 +60,23 @@ describe.skipIf(!hasDb)("candidate functions", () => {
   it('closed drive → "drive_closed"; unknown slug → "drive_not_found"', async () => {
     const closed = await makeDrive({ status: "closed" });
     const me = await newCandidate();
-    const a = await me.client.rpc("apply_to_drive", { p_slug: closed.slug, ...PROFILE });
+    const a = await me.client.rpc("apply_to_drive", {
+      p_slug: closed.slug,
+      ...PROFILE,
+    });
     expect(a.error?.message).toBe("drive_closed");
-    const b = await me.client.rpc("apply_to_drive", { p_slug: "test-nope-nope", ...PROFILE });
+    const b = await me.client.rpc("apply_to_drive", {
+      p_slug: "test-nope-nope",
+      ...PROFILE,
+    });
     expect(b.error?.message).toBe("drive_not_found");
   });
 
   it("anon can read a public drive with its rounds, but gets null for unknown slugs", async () => {
     const drive = await makeDrive({ rounds: 3 });
-    const { data, error } = await anon().rpc("get_public_drive", { p_slug: drive.slug });
+    const { data, error } = await anon().rpc("get_public_drive", {
+      p_slug: drive.slug,
+    });
     expect(error).toBeNull();
     expect(data).toMatchObject({ status: "open", openings: 3 });
     expect(data.rounds.map((r: { name: string }) => r.name)).toEqual([
@@ -69,7 +84,9 @@ describe.skipIf(!hasDb)("candidate functions", () => {
       "Aptitude Test",
       "Technical Interview",
     ]);
-    const none = await anon().rpc("get_public_drive", { p_slug: "test-nope-nope" });
+    const none = await anon().rpc("get_public_drive", {
+      p_slug: "test-nope-nope",
+    });
     expect(none.data).toBeNull();
   });
 
@@ -88,7 +105,9 @@ describe.skipIf(!hasDb)("candidate functions", () => {
     const a = await newCandidate();
     const b = await newCandidate();
     const bId = await apply(b.client, drive.slug);
-    const { error } = await a.client.rpc("get_my_application", { p_candidate_id: bId });
+    const { error } = await a.client.rpc("get_my_application", {
+      p_candidate_id: bId,
+    });
     expect(error?.message).toBe("application_not_found");
   });
 
@@ -110,7 +129,9 @@ describe.skipIf(!hasDb)("candidate functions", () => {
     const { data: rows } = await me.client.from("round_decisions").select("*");
     expect(rows).toEqual([]);
 
-    const { data, error } = await me.client.rpc("get_my_application", { p_candidate_id: id });
+    const { data, error } = await me.client.rpc("get_my_application", {
+      p_candidate_id: id,
+    });
     expect(error).toBeNull();
     const text = JSON.stringify(data);
     expect(text).not.toContain(note);
@@ -157,16 +178,31 @@ describe.skipIf(!hasDb)("candidate functions", () => {
       p_details: VALID_DETAILS,
     });
     expect(error).toBeNull();
-    const { data: row } = await admin().from("candidates").select("status").eq("id", id).single();
+    const { data: row } = await admin()
+      .from("candidates")
+      .select("status")
+      .eq("id", id)
+      .single();
     expect(row.status).toBe("details_submitted");
-    const { data: jd } = await me.client.from("joining_details").select("*").eq("candidate_id", id);
-    expect(jd?.[0]).toMatchObject({ pan_number: "ABCDE1234F", changes_requested_reason: null });
-    expect((await messagesFor(id)).map((m) => m.template)).toContain("details_received");
+    const { data: jd } = await me.client
+      .from("joining_details")
+      .select("*")
+      .eq("candidate_id", id);
+    expect(jd?.[0]).toMatchObject({
+      pan_number: "ABCDE1234F",
+      changes_requested_reason: null,
+    });
+    expect((await messagesFor(id)).map((m) => m.template)).toContain(
+      "details_received",
+    );
   });
 
   it("anon calling apply_to_drive → error", async () => {
     const drive = await makeDrive();
-    const { data, error } = await anon().rpc("apply_to_drive", { p_slug: drive.slug, ...PROFILE });
+    const { data, error } = await anon().rpc("apply_to_drive", {
+      p_slug: drive.slug,
+      ...PROFILE,
+    });
     expect(error).not.toBeNull();
     expect(data).toBeNull();
   });
