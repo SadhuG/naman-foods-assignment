@@ -10,3 +10,5 @@ docs/plan/
 *.tsbuildinfo
 .vercel
 .playwright-mcp/
+supabase/.temp/
+supabase/.branches/
