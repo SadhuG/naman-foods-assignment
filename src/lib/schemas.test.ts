@@ -44,3 +44,81 @@ describe("accountSchema", () => {
     ).toBe("a@b.co");
   });
 });
+
+describe("joiningSchema", async () => {
+  const { joiningSchema, joiningProgressLabel } = await import("./schemas");
+  const iso = (days: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
+  };
+  const yearsAgo = (y: number, extraDays = 0) => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - y);
+    d.setDate(d.getDate() + extraDays);
+    return d.toISOString().slice(0, 10);
+  };
+  const sample = {
+    date_of_birth: "1999-07-09",
+    aadhaar_number: "2345 6789 0123",
+    pan_number: "abcde1234f",
+    uan_number: "",
+    bank_account_holder: "Meera Iyer",
+    bank_account_number: "123456789012",
+    bank_ifsc: "hdfc0001234",
+    address: "12 Gandhi Colony, Jaipur 302001",
+    emergency_contact_name: "Lata Iyer",
+    emergency_contact_phone: "+91 94140 55679",
+    preferred_joining_date: iso(10),
+  };
+  const errorFor = (over: Record<string, unknown>, field: string) => {
+    const r = joiningSchema.safeParse({ ...sample, ...over });
+    return r.error?.issues.find((i) => i.path[0] === field)?.message;
+  };
+
+  it("normalises loosely typed IDs", () => {
+    const r = joiningSchema.parse(sample);
+    expect(r.pan_number).toBe("ABCDE1234F");
+    expect(r.aadhaar_number).toBe("234567890123");
+    expect(r.bank_ifsc).toBe("HDFC0001234");
+    expect(r.emergency_contact_phone).toBe("9414055679");
+    expect(r.uan_number).toBeNull();
+  });
+  it("gives field copy for wrong IDs", () => {
+    expect(errorFor({ aadhaar_number: "23456789012" }, "aadhaar_number")).toBe(
+      "Enter the 12-digit Aadhaar number.",
+    );
+    expect(errorFor({ pan_number: "ABCD1234F" }, "pan_number")).toBe(
+      "PAN looks like ABCDE1234F.",
+    );
+    expect(errorFor({ bank_ifsc: "HDFC1234" }, "bank_ifsc")).toBe(
+      "IFSC looks like HDFC0001234.",
+    );
+    expect(
+      errorFor({ bank_account_number: "1234" }, "bank_account_number"),
+    ).toBe("Account numbers are 9–18 digits.");
+  });
+  it("checks the joining date window and age", () => {
+    expect(
+      errorFor({ preferred_joining_date: iso(-1) }, "preferred_joining_date"),
+    ).toBeTruthy();
+    expect(
+      errorFor({ preferred_joining_date: iso(91) }, "preferred_joining_date"),
+    ).toBeTruthy();
+    expect(
+      errorFor({ preferred_joining_date: iso(0) }, "preferred_joining_date"),
+    ).toBeUndefined();
+    expect(
+      errorFor({ date_of_birth: yearsAgo(17) }, "date_of_birth"),
+    ).toBeTruthy();
+    expect(
+      errorFor({ date_of_birth: yearsAgo(18, -1) }, "date_of_birth"),
+    ).toBeUndefined();
+  });
+  it("labels joining progress", () => {
+    expect(joiningProgressLabel("selected", true)).toBe("Changes requested");
+    expect(joiningProgressLabel("selected", false)).toBe("Not started");
+    expect(joiningProgressLabel("details_submitted", false)).toBe("Submitted");
+    expect(joiningProgressLabel("onboarded", false)).toBe("Onboarded");
+  });
+});
