@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { Inbox, Search } from "lucide-react";
+import { Download, Inbox, Search } from "lucide-react";
+import { Button } from "../../components/ui/Button";
+import { runExport } from "../export/ExportMenu";
 import { useState } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { EmailPreview } from "../../components/messages/EmailPreview";
@@ -78,7 +80,11 @@ export default function OutboxPage() {
               ` ${plural(all.length, "message")} to ${plural(people, "candidate")}.`}
           </p>
         </div>
-        {/* Export message log: Phase 10 */}
+        {d && (
+          <Button variant="secondary" onClick={() => runExport(d, "messages")}>
+            <Download aria-hidden className="size-4" /> Export message log
+          </Button>
+        )}
       </div>
 
       {msgs.isPending ? (

@@ -26,6 +26,7 @@ import {
 } from "../../lib/pipeline";
 import { joiningProgressLabel } from "../../lib/schemas";
 import type { Candidate, Decision, StageKey } from "../../lib/types";
+import { ExportMenu, runExport } from "../export/ExportMenu";
 import { ShareDrive } from "../drives/ShareDrive";
 import { Breadcrumbs, HrShell } from "../hr/HrShell";
 import { BulkBar } from "./BulkBar";
@@ -163,7 +164,15 @@ export default function PipelinePage() {
           <Button variant="secondary" onClick={() => setShare(true)}>
             <Link2 aria-hidden className="size-4" /> Share link
           </Button>
-          {/* Export menu: Phase 10 */}
+          <ExportMenu
+            drive={d}
+            stageLabel={
+              tabs.find((t) => t.key === stage)?.label.replace(/^\d+ · /, "") ??
+              "Stage"
+            }
+            stageRows={rows}
+            selected={chosen}
+          />
         </div>
       </div>
 
@@ -303,6 +312,7 @@ export default function PipelinePage() {
         }
         onAction={setDialog}
         onClear={() => setSelected(new Set())}
+        onExport={() => runExport(d, "selected", { rows: chosen })}
       />
       {dialog && (
         <DecisionDialog

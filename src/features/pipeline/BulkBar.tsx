@@ -1,4 +1,4 @@
-import { Pause } from "lucide-react";
+import { Download, Pause } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import type { Decision } from "../../lib/types";
 
@@ -9,12 +9,14 @@ export function BulkBar({
   approveLabel,
   onAction,
   onClear,
+  onExport,
 }: {
   count: number;
   actions: Decision[];
   approveLabel: string;
   onAction: (d: Decision) => void;
   onClear: () => void;
+  onExport: () => void;
 }) {
   if (count === 0) return null;
   return (
@@ -32,6 +34,12 @@ export function BulkBar({
           className="rounded-sm px-1 text-label text-neutral-400 hover:text-fg-inverse"
         >
           Clear
+        </button>
+        <button
+          onClick={onExport}
+          className="inline-flex items-center gap-1.5 rounded-sm px-1 text-label text-neutral-400 hover:text-fg-inverse"
+        >
+          <Download aria-hidden className="size-4" /> Export
         </button>
         <div className="flex-1" />
         {actions.length === 0 && (

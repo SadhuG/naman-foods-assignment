@@ -225,7 +225,8 @@ export function DecisionDialog({
               aria-describedby={`${msgId}-hint`}
             />
             <p id={`${msgId}-hint`} className="text-small text-fg-secondary">
-              Included in the email they receive and on their timeline (not the SMS).
+              Included in the email they receive and on their timeline (not the
+              SMS).
             </p>
           </div>
           <div className="flex gap-3 rounded-md bg-surface-sunken px-4 py-3">
