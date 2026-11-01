@@ -227,4 +227,13 @@ describe.skipIf(!hasDb)("hr functions", () => {
       .single();
     expect(sum).toMatchObject({ active: 1, on_hold: 1, total: 2 });
   });
+
+  it("the same id sent twice counts once", async () => {
+    const drive = await makeDrive({ rounds: 3 });
+    const c = await candidateIn(drive.slug);
+    expect(await decide([c.id, c.id], "approved")).toEqual({
+      moved: 1,
+      skipped: 0,
+    });
+  });
 });

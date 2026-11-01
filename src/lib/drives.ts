@@ -28,7 +28,7 @@ const text = (label: string, max: number) =>
     .max(max, `Keep it under ${max} characters.`);
 
 export const driveSchema = z.object({
-  title: text("a title", 120),
+  title: text("a title", 120).min(3, "Use at least 3 characters."),
   role: text("the role", 80),
   location: text("a location", 80),
   openings: z

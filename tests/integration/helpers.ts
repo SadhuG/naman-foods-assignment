@@ -158,7 +158,10 @@ export const VALID_DETAILS = {
   address: "House 22, Shastri Nagar, Jaipur 302016",
   emergency_contact_name: "Parent",
   emergency_contact_phone: "9414055678",
-  preferred_joining_date: "2026-11-17",
+  // two weeks out, inside the 0–90 day window
+  preferred_joining_date: new Date(Date.now() + 14 * 864e5)
+    .toISOString()
+    .slice(0, 10),
 };
 
 /** Delete every test drive (cascades to candidates, decisions, messages) and test user. */

@@ -206,4 +206,24 @@ describe.skipIf(!hasDb)("candidate functions", () => {
     expect(error).not.toBeNull();
     expect(data).toBeNull();
   });
+
+  it("submit_joining_details rejects a past joining date and an under-18 birth date", async () => {
+    const drive = await makeDrive();
+    const me = await newCandidate();
+    const id = await apply(me.client, drive.slug);
+    await setStatus(id, { status: "selected" });
+    const past = await me.client.rpc("submit_joining_details", {
+      p_candidate_id: id,
+      p_details: { ...VALID_DETAILS, preferred_joining_date: "2020-01-01" },
+    });
+    expect(past.error?.message).toBe("invalid_joining_date");
+    const young = await me.client.rpc("submit_joining_details", {
+      p_candidate_id: id,
+      p_details: {
+        ...VALID_DETAILS,
+        date_of_birth: new Date().toISOString().slice(0, 10),
+      },
+    });
+    expect(young.error?.message).toBe("invalid_date_of_birth");
+  });
 });

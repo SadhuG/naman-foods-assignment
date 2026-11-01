@@ -32,6 +32,7 @@ describe("driveSchema", () => {
     ["a blank round", { rounds: ["Screening", "  "] }],
     ["duplicate rounds", { rounds: ["Screening", "screening "] }],
     ["0 openings", { openings: 0 }],
+    ["a 2-character title", { title: "QA" }],
   ])("rejects %s", (_, over) => {
     expect(driveSchema.safeParse({ ...valid, ...over }).success).toBe(false);
   });
