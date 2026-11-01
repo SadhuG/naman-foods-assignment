@@ -1,14 +1,8 @@
+import { STATUS_LABEL_TEXT } from "../../lib/statusLabels";
 import type { CandidateStatus } from "../../lib/types";
 import { cn } from "./cn";
 
-export const STATUS_LABEL: Record<CandidateStatus, string> = {
-  active: "Active",
-  on_hold: "On hold",
-  rejected: "Rejected",
-  selected: "Selected",
-  details_submitted: "Details submitted",
-  onboarded: "Onboarded",
-};
+export const STATUS_LABEL = STATUS_LABEL_TEXT;
 
 const TONE: Record<CandidateStatus, string> = {
   active: "bg-status-active-bg text-status-active-fg",
