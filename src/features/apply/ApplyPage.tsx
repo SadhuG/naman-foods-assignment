@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryError } from "../../components/ui/QueryError";
 import { BriefcaseBusiness, MapPin, SearchX, Users } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { Banner } from "../../components/ui/Banner";
@@ -36,8 +36,12 @@ export default function ApplyPage() {
     queryKey: candidateKeys.drive(slug),
     queryFn: () => getPublicDrive(slug),
   });
+  // Signing up mid-submit sets auth back to loading. Once the page has shown, keep it
+  // mounted so the form keeps what was typed and any error stays visible.
+  const settled = useRef(false);
+  if (drive.data && !auth.loading) settled.current = true;
 
-  if (drive.isPending || auth.loading)
+  if (drive.isPending || (auth.loading && !settled.current))
     return (
       <CandidateShell>
         <DriveSkeleton />

@@ -124,7 +124,10 @@ export async function signUp(
   if (!data.session || data.user?.identities?.length === 0) {
     throw new Error("User already registered");
   }
-  queryClient.clear();
+  // Sign-up starts signed out: keep the public drive the form is showing.
+  queryClient.removeQueries({
+    predicate: (q) => q.queryKey[0] !== "public-drive",
+  });
   await apply(data.session);
 }
 

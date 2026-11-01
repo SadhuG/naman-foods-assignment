@@ -52,6 +52,31 @@ describe.skipIf(!hasDb)("hr functions", () => {
     return data as { moved: number; skipped: number };
   }
 
+  it("a stale decision (someone else already moved them) is skipped, not applied twice", async () => {
+    const drive = await makeDrive({ rounds: 3 });
+    const c = await candidateIn(drive.slug);
+    const seen = { [c.id]: { round: 1, status: "active" } };
+    const call = (expected: unknown) =>
+      H.rpc("hr_decide", {
+        p_candidate_ids: [c.id],
+        p_decision: "approved",
+        p_expected: expected,
+      });
+    // Two HR people both saw round 1 and both approve.
+    expect((await call(seen)).data).toEqual({ moved: 1, skipped: 0 });
+    expect((await call(seen)).data).toEqual({ moved: 0, skipped: 1 });
+    expect(await state(c.id)).toEqual({ status: "active", current_round: 2 });
+    expect(
+      (await messagesFor(c.id)).filter((m) => m.template === "moved_to_round"),
+    ).toHaveLength(1);
+    // Status is checked too: a hold seen as active is stale once rejected.
+    await setStatus(c.id, { status: "on_hold" });
+    const res = await call({ [c.id]: { round: 2, status: "active" } });
+    expect(res.data).toEqual({ moved: 0, skipped: 1 });
+    // Without expectations the old behaviour stands.
+    expect((await call(null)).data).toEqual({ moved: 1, skipped: 0 });
+  });
+
   it("approve at round 1 of 3 → active, round 2; message moved_to_round with next_round_name", async () => {
     const drive = await makeDrive({ rounds: 3 });
     const c = await candidateIn(drive.slug);

@@ -22,14 +22,10 @@ export function useDecide(driveId: string, rounds: DriveRound[]) {
     note?: string,
     message?: string,
   ) => {
-    const result = await decide(
-      cs.map((c) => c.id),
-      decision,
-      note,
-      message,
-    );
+    const result = await decide(cs, decision, note, message);
     toast.success(decisionToast(decision, result, approveTarget(cs, rounds)));
-    await Promise.all([
+    // Saved: let the dialog close now and refresh the lists behind it.
+    void Promise.all([
       queryClient.invalidateQueries({ queryKey: pipelineKeys.list(driveId) }),
       queryClient.invalidateQueries({ queryKey: ["candidate"] }),
       queryClient.invalidateQueries({ queryKey: ["drives"] }),

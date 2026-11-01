@@ -106,6 +106,17 @@ describe("matchesSearch", () => {
     expect(matchesSearch(cand({}), "  ")).toBe(true);
     expect(matchesSearch(cand({}), "rohan")).toBe(false);
   });
+
+  it("matches a phone typed the way the table shows it", () => {
+    // stored 9876543210, shown "98765 43210"
+    expect(matchesSearch(cand({}), "98765 43210")).toBe(true);
+    expect(matchesSearch(cand({}), "+91 98765-43210")).toBe(true);
+    expect(matchesSearch(cand({}), "098765 43210")).toBe(true);
+    expect(matchesSearch(cand({}), "43 21")).toBe(true);
+    expect(matchesSearch(cand({}), "98765 99999")).toBe(false);
+    // a lone space-separated word is still a name search
+    expect(matchesSearch(cand({}), "1 2")).toBe(false);
+  });
 });
 
 describe("decisionToast", () => {

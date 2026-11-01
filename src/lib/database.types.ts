@@ -342,6 +342,7 @@ export type Database = {
           p_candidate_ids: string[];
           p_candidate_message?: string;
           p_decision: string;
+          p_expected?: Json;
           p_note?: string;
         };
         Returns: Json;

@@ -24,17 +24,24 @@ export async function listCandidates(driveId: string): Promise<Candidate[]> {
   return data as Candidate[];
 }
 
+/**
+ * Decides for these candidates as HR last saw them. Anyone whose round or status has
+ * changed since (another HR person got there first) is skipped by the server.
+ */
 export async function decide(
-  ids: string[],
+  seen: Array<Pick<Candidate, "id" | "current_round" | "status">>,
   decision: Decision,
   note?: string,
   candidateMessage?: string,
 ): Promise<{ moved: number; skipped: number }> {
   const { data, error } = await supabase.rpc("hr_decide", {
-    p_candidate_ids: ids,
+    p_candidate_ids: seen.map((c) => c.id),
     p_decision: decision,
     p_note: note || undefined,
     p_candidate_message: candidateMessage || undefined,
+    p_expected: Object.fromEntries(
+      seen.map((c) => [c.id, { round: c.current_round, status: c.status }]),
+    ),
   });
   if (error) throw error;
   return data as { moved: number; skipped: number };
@@ -81,6 +88,35 @@ export function useCandidatesLive(driveId: string): void {
   const queryClient = useQueryClient();
   useEffect(() => {
     if (!driveId) return;
+    // A bulk decision sends one event per candidate (50 for a full drive). Invalidating on
+    // each would cancel the reload in flight every time, so the list never updated until
+    // the stream ended. Instead: let a reload finish, then do one more if events arrived.
+    let running = false;
+    let again = false;
+    const refresh = async () => {
+      if (running) {
+        again = true;
+        return;
+      }
+      running = true;
+      try {
+        do {
+          again = false;
+          await Promise.all([
+            queryClient.invalidateQueries(
+              { queryKey: pipelineKeys.list(driveId) },
+              { cancelRefetch: false },
+            ),
+            queryClient.invalidateQueries(
+              { queryKey: ["drives"] },
+              { cancelRefetch: false },
+            ),
+          ]);
+        } while (again);
+      } finally {
+        running = false;
+      }
+    };
     const channel = supabase
       .channel(`candidates-${driveId}`)
       .on(
@@ -91,12 +127,7 @@ export function useCandidatesLive(driveId: string): void {
           table: "candidates",
           filter: `drive_id=eq.${driveId}`,
         },
-        () => {
-          queryClient.invalidateQueries({
-            queryKey: pipelineKeys.list(driveId),
-          });
-          queryClient.invalidateQueries({ queryKey: ["drives"] });
-        },
+        () => void refresh(),
       )
       .subscribe();
     return () => {

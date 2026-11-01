@@ -69,9 +69,19 @@ export function matchesSearch(
 ): boolean {
   const needle = q.trim().toLowerCase();
   if (!needle) return true;
-  return [c.full_name, c.email, c.phone].some((v) =>
-    v.toLowerCase().includes(needle),
-  );
+  if (
+    [c.full_name, c.email, c.phone].some((v) =>
+      v.toLowerCase().includes(needle),
+    )
+  )
+    return true;
+  // Phones are shown "98765 43210" (and often typed "+91 …" or "0…"), but stored as 10 digits.
+  if (!/^[\d\s+\-().]+$/.test(needle)) return false;
+  let digits = needle.replace(/\D/g, "");
+  if (digits.length === 12 && digits.startsWith("91")) digits = digits.slice(2);
+  else if (digits.length === 11 && digits.startsWith("0"))
+    digits = digits.slice(1);
+  return digits.length >= 3 && c.phone.includes(digits);
 }
 
 export function decisionToast(
