@@ -1,46 +1,92 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Route, Routes } from "react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense, type ReactNode } from "react";
+import { Link, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
+import { buttonClass } from "./components/ui/Button";
+import { EmptyState } from "./components/ui/EmptyState";
+import { PageSpinner } from "./components/ui/Spinner";
+import ApplyPage from "./features/apply/ApplyPage";
+import LoginPage from "./features/auth/LoginPage";
+import { RequireRole } from "./features/auth/RequireRole";
+import ApplicationPage from "./features/me/ApplicationPage";
+import { CandidateShell } from "./features/me/CandidateShell";
+import MyApplicationsPage from "./features/me/MyApplicationsPage";
+import { queryClient } from "./lib/queryClient";
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 15_000, retry: 1 } },
-});
+const KitPage = import.meta.env.DEV
+  ? lazy(() => import("./features/dev/KitPage"))
+  : null;
 
 function Placeholder({ title }: { title: string }) {
   return (
     <main className="p-8">
-      <h1 className="text-2xl font-semibold">{title}</h1>
+      <h1 className="text-heading">{title}</h1>
     </main>
   );
 }
 
-const routes: Array<[path: string, title: string]> = [
-  ["/login", "Log in"],
-  ["/apply/:slug", "Apply"],
-  ["/me", "My applications"],
-  ["/me/applications/:id", "Application"],
-  ["/me/inbox", "Inbox"],
-  ["/", "Drives"],
-  ["/drives/new", "New drive"],
-  ["/drives/:id", "Pipeline"],
-  ["/drives/:id/edit", "Edit drive"],
-  ["/drives/:id/outbox", "Outbox"],
-  ["*", "Page not found"],
-];
+const hr = (el: ReactNode) => <RequireRole role="hr">{el}</RequireRole>;
+const candidate = (el: ReactNode) => (
+  <RequireRole role="candidate">{el}</RequireRole>
+);
+
+function NotFound() {
+  return (
+    <CandidateShell>
+      <EmptyState
+        title="Page not found"
+        body="The link may be mistyped or out of date."
+        action={
+          <Link to="/" className={buttonClass("secondary")}>
+            Go home
+          </Link>
+        }
+      />
+    </CandidateShell>
+  );
+}
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
-        {routes.map(([path, title]) => (
+      <Suspense fallback={<PageSpinner />}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/apply/:slug" element={<ApplyPage />} />
+          <Route path="/me" element={candidate(<MyApplicationsPage />)} />
           <Route
-            key={path}
-            path={path}
-            element={<Placeholder title={title} />}
+            path="/me/applications/:id"
+            element={candidate(<ApplicationPage />)}
           />
-        ))}
-      </Routes>
-      <Toaster richColors position="bottom-right" />
+          <Route
+            path="/me/inbox"
+            element={candidate(<Placeholder title="Inbox" />)}
+          />
+          <Route path="/" element={hr(<Placeholder title="Drives" />)} />
+          <Route
+            path="/drives/new"
+            element={hr(<Placeholder title="New drive" />)}
+          />
+          <Route
+            path="/drives/:id"
+            element={hr(<Placeholder title="Pipeline" />)}
+          />
+          <Route
+            path="/drives/:id/edit"
+            element={hr(<Placeholder title="Edit drive" />)}
+          />
+          <Route
+            path="/drives/:id/outbox"
+            element={hr(<Placeholder title="Outbox" />)}
+          />
+          {KitPage && <Route path="/_kit" element={<KitPage />} />}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+      <Toaster
+        position="bottom-center"
+        toastOptions={{ className: "font-sans" }}
+      />
     </QueryClientProvider>
   );
 }

@@ -12,18 +12,18 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
     role: "hr",
     email: "demo.hr@example.com",
     name: "HR team",
-    label: "HR team",
+    label: "Sees both drives, all 59 candidates",
   },
   {
     role: "candidate",
     email: "demo.aarav@example.com",
     name: "Aarav Mehta",
-    label: "Candidate · in interviews",
+    label: "Candidate · in Technical Interview",
   },
   {
     role: "candidate",
     email: "demo.meera@example.com",
     name: "Meera Iyer",
-    label: "Candidate · selected",
+    label: "Candidate · selected, details pending",
   },
 ];
