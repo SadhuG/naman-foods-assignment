@@ -3,20 +3,8 @@ import type { ReactNode } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import { Avatar, Wordmark } from "../../components/ui/Brand";
 import { cn } from "../../components/ui/cn";
+import { DemoMarker } from "../../components/messages/DemoMarker";
 import { signOut } from "../../lib/api/auth";
-
-/** Amber "DEMO · NOT ACTUALLY SENT" marker from the Figma DemoMarker component. */
-export function DemoMarker({
-  children = "Demo · not actually sent",
-}: {
-  children?: ReactNode;
-}) {
-  return (
-    <span className="inline-flex h-5.5 items-center rounded-sm bg-demo-bg px-2 font-mono text-caption text-demo-fg uppercase">
-      {children}
-    </span>
-  );
-}
 
 export function HrShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();

@@ -12,21 +12,15 @@ import LoginPage from "./features/auth/LoginPage";
 import { RequireRole } from "./features/auth/RequireRole";
 import ApplicationPage from "./features/me/ApplicationPage";
 import { CandidateShell } from "./features/me/CandidateShell";
+import InboxPage from "./features/me/InboxPage";
 import MyApplicationsPage from "./features/me/MyApplicationsPage";
+import OutboxPage from "./features/outbox/OutboxPage";
 import PipelinePage from "./features/pipeline/PipelinePage";
 import { queryClient } from "./lib/queryClient";
 
 const KitPage = import.meta.env.DEV
   ? lazy(() => import("./features/dev/KitPage"))
   : null;
-
-function Placeholder({ title }: { title: string }) {
-  return (
-    <main className="p-8">
-      <h1 className="text-heading">{title}</h1>
-    </main>
-  );
-}
 
 const hr = (el: ReactNode) => <RequireRole role="hr">{el}</RequireRole>;
 const candidate = (el: ReactNode) => (
@@ -61,18 +55,12 @@ export default function App() {
             path="/me/applications/:id"
             element={candidate(<ApplicationPage />)}
           />
-          <Route
-            path="/me/inbox"
-            element={candidate(<Placeholder title="Inbox" />)}
-          />
+          <Route path="/me/inbox" element={candidate(<InboxPage />)} />
           <Route path="/" element={hr(<DrivesPage />)} />
           <Route path="/drives/new" element={hr(<NewDrivePage />)} />
           <Route path="/drives/:id" element={hr(<PipelinePage />)} />
           <Route path="/drives/:id/edit" element={hr(<EditDrivePage />)} />
-          <Route
-            path="/drives/:id/outbox"
-            element={hr(<Placeholder title="Outbox" />)}
-          />
+          <Route path="/drives/:id/outbox" element={hr(<OutboxPage />)} />
           {KitPage && <Route path="/_kit" element={<KitPage />} />}
           <Route path="*" element={<NotFound />} />
         </Routes>
