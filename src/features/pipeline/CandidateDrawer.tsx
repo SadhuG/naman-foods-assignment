@@ -17,6 +17,7 @@ import { formatPhone, shortDate, years } from "../../lib/copy";
 import { allowedDecisions, DECISION_LABEL } from "../../lib/pipeline";
 import type { Decision, Drive, DriveRound } from "../../lib/types";
 import { DecisionDialog } from "./DecisionDialog";
+import { decisionPreview, DrawerMessages } from "./DecisionPreview";
 import { DefinitionList, DrawerSection } from "./DrawerParts";
 import { JoiningActions, JoiningReview } from "./JoiningReview";
 import { describeMoveFor, useDecide } from "./useDecide";
@@ -195,10 +196,12 @@ export function CandidateDrawer({
               ]}
             />
           </DrawerSection>
+          <DrawerMessages detail={d!} />
         </div>
       )}
       {c && dialog && (
         <DecisionDialog
+          previewSlot={decisionPreview(drive, rounds)}
           open
           onClose={() => setDialog(null)}
           decision={dialog}

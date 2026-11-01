@@ -32,6 +32,7 @@ import { BulkBar } from "./BulkBar";
 import { CandidateDrawer } from "./CandidateDrawer";
 import { CandidateTable } from "./CandidateTable";
 import { DecisionDialog } from "./DecisionDialog";
+import { decisionPreview } from "./DecisionPreview";
 import { approveTarget, describeMoveFor, useDecide } from "./useDecide";
 
 const ORDER: Decision[] = ["approved", "on_hold", "rejected", "reopened"];
@@ -305,6 +306,7 @@ export default function PipelinePage() {
       />
       {dialog && (
         <DecisionDialog
+          previewSlot={decisionPreview(d, rounds)}
           open
           onClose={() => setDialog(null)}
           decision={dialog}
