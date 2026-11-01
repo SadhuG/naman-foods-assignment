@@ -17,7 +17,7 @@ export function Tabs({
     <div
       role="tablist"
       aria-label={label}
-      className="flex gap-6 overflow-x-auto border-b border-border-default"
+      className="flex gap-6 overflow-x-auto overflow-y-hidden border-b border-border-default"
     >
       {items.map((t) => {
         const on = t.key === value;

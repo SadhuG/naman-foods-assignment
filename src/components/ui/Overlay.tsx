@@ -11,6 +11,8 @@ export type OverlayProps = {
   children?: ReactNode;
   footer?: ReactNode;
   className?: string;
+  /** Dialog width: md 560 px, lg 1120 px. Drawers: md 520 px, lg 560 px. */
+  size?: "md" | "lg";
 };
 
 const FOCUSABLE =
@@ -26,6 +28,7 @@ export function Overlay({
   footer,
   kind,
   className,
+  size = "md",
 }: OverlayProps & { kind: "dialog" | "drawer" }) {
   const panel = useRef<HTMLDivElement>(null);
   const titleId = useId();
@@ -42,6 +45,11 @@ export function Overlay({
     );
     (first ?? panel.current)?.focus();
     const onKey = (e: KeyboardEvent) => {
+      // Only the topmost overlay reacts (a dialog can open over a drawer).
+      const all = document.querySelectorAll(
+        '[role="dialog"][aria-modal="true"]',
+      );
+      if (all[all.length - 1] !== panel.current) return;
       if (e.key === "Escape") close.current();
       if (e.key !== "Tab" || !panel.current) return;
       const items = panel.current.querySelectorAll<HTMLElement>(FOCUSABLE);
@@ -88,8 +96,8 @@ export function Overlay({
         className={cn(
           "relative flex max-h-full flex-col bg-surface-raised shadow-2xl outline-none",
           kind === "dialog"
-            ? "w-full max-w-140 rounded-xl"
-            : "h-full w-full max-w-130",
+            ? cn("w-full rounded-xl", size === "lg" ? "max-w-280" : "max-w-140")
+            : cn("h-full w-full", size === "lg" ? "max-w-140" : "max-w-130"),
           className,
         )}
       >

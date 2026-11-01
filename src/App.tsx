@@ -13,6 +13,7 @@ import { RequireRole } from "./features/auth/RequireRole";
 import ApplicationPage from "./features/me/ApplicationPage";
 import { CandidateShell } from "./features/me/CandidateShell";
 import MyApplicationsPage from "./features/me/MyApplicationsPage";
+import PipelinePage from "./features/pipeline/PipelinePage";
 import { queryClient } from "./lib/queryClient";
 
 const KitPage = import.meta.env.DEV
@@ -66,10 +67,7 @@ export default function App() {
           />
           <Route path="/" element={hr(<DrivesPage />)} />
           <Route path="/drives/new" element={hr(<NewDrivePage />)} />
-          <Route
-            path="/drives/:id"
-            element={hr(<Placeholder title="Pipeline" />)}
-          />
+          <Route path="/drives/:id" element={hr(<PipelinePage />)} />
           <Route path="/drives/:id/edit" element={hr(<EditDrivePage />)} />
           <Route
             path="/drives/:id/outbox"
