@@ -13,7 +13,7 @@ export function DriveStatusChip({ status }: { status: "open" | "closed" }) {
         "inline-flex h-6 items-center rounded-full px-2.5 text-label",
         status === "open"
           ? "bg-accent-soft text-accent-default"
-          : "bg-surface-sunken text-fg-secondary",
+          : "bg-surface-sunken text-neutral-600",
       )}
     >
       {status === "open" ? "Open" : "Closed"}

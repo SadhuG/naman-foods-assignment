@@ -101,7 +101,7 @@ export function Overlay({
           className,
         )}
       >
-        <header className="flex items-start gap-4 px-6 pt-6 pb-4">
+        <div className="flex items-start gap-4 px-6 pt-6 pb-4">
           <div className="min-w-0 flex-1">
             <h2 id={titleId} className="text-heading">
               {title}
@@ -117,19 +117,19 @@ export function Overlay({
           >
             <X className="size-5" />
           </button>
-        </header>
+        </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6">
           {children}
         </div>
         {footer && (
-          <footer
+          <div
             className={cn(
               "flex justify-end gap-2 border-t border-border-default bg-surface-canvas px-6 py-4",
               kind === "dialog" && "rounded-b-xl",
             )}
           >
             {footer}
-          </footer>
+          </div>
         )}
       </div>
     </div>,

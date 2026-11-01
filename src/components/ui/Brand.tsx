@@ -13,7 +13,6 @@ export function Wordmark({
     <Link
       to={to}
       className={cn("inline-flex flex-col leading-none", className)}
-      aria-label="Shortlist by Naman Foods, home"
     >
       <span className="text-[20px] font-semibold tracking-[-0.02em]">
         Shortlist

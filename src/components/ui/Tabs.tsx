@@ -41,7 +41,7 @@ export function Tabs({
                   "rounded-full px-2 text-small tabular-nums",
                   on
                     ? "bg-accent-soft text-accent-default"
-                    : "bg-surface-sunken text-fg-secondary",
+                    : "bg-surface-sunken text-neutral-600",
                 )}
               >
                 {t.count}

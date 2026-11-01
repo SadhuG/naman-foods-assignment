@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryError } from "../../components/ui/QueryError";
 import { BriefcaseBusiness, MapPin, SearchX, Users } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router";
@@ -45,10 +46,11 @@ export default function ApplyPage() {
   if (drive.isError)
     return (
       <CandidateShell>
-        <Banner tone="danger" title="We couldn't load this drive.">
-          {friendlyError(drive.error)} Check your connection and reload the
-          page.
-        </Banner>
+        <QueryError
+          title="We couldn't load this drive."
+          error={drive.error}
+          onRetry={() => drive.refetch()}
+        />
       </CandidateShell>
     );
   if (!drive.data)
@@ -216,7 +218,7 @@ function OpenDrive({ slug, drive }: { slug: string; drive: PublicDrive }) {
             Already have an account?{" "}
             <Link
               to={`/login?next=${encodeURIComponent(`/apply/${slug}`)}`}
-              className="text-fg-link hover:underline"
+              className="text-fg-link underline"
             >
               Log in
             </Link>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
+import { QueryError } from "../../components/ui/QueryError";
 import { BriefcaseBusiness, Plus } from "lucide-react";
 import { Link } from "react-router";
-import { Banner } from "../../components/ui/Banner";
 import { buttonClass } from "../../components/ui/Button";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { PageSpinner } from "../../components/ui/Spinner";
@@ -10,7 +10,6 @@ import {
   listDrives,
   type DriveListItem,
 } from "../../lib/api/drives";
-import { friendlyError } from "../../lib/api/errors";
 import { plural, timeAgo } from "../../lib/copy";
 import { HrShell } from "../hr/HrShell";
 import { DriveCard } from "./DriveCard";
@@ -98,9 +97,11 @@ export default function DrivesPage() {
         {drives.isPending ? (
           <PageSpinner />
         ) : drives.isError ? (
-          <Banner tone="danger" title="We couldn't load the drives.">
-            {friendlyError(drives.error)}
-          </Banner>
+          <QueryError
+            title="We couldn't load the drives."
+            error={drives.error}
+            onRetry={() => drives.refetch()}
+          />
         ) : list.length === 0 ? (
           <div className="rounded-lg border border-border-default bg-surface-raised">
             <EmptyState

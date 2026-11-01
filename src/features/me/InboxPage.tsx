@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { QueryError } from "../../components/ui/QueryError";
 import { ChevronLeft, Inbox } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { EmailPreview } from "../../components/messages/EmailPreview";
@@ -9,12 +10,10 @@ import {
   sentAt,
 } from "../../components/messages/MessageList";
 import { SmsPreview } from "../../components/messages/SmsPreview";
-import { Banner } from "../../components/ui/Banner";
 import { Card } from "../../components/ui/Brand";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { PageSpinner } from "../../components/ui/Spinner";
 import { cn } from "../../components/ui/cn";
-import { friendlyError } from "../../lib/api/errors";
 import { listMyMessages, messageKeys } from "../../lib/api/messages";
 import { CandidateShell } from "./CandidateShell";
 
@@ -30,7 +29,7 @@ export default function InboxPage() {
 
   return (
     <CandidateShell wide>
-      <div className={cn(open && "hidden lg:block")}>
+      <div className={cn(open && "sr-only lg:not-sr-only")}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-display">Inbox</h1>
           <DemoMarker />
@@ -47,7 +46,7 @@ export default function InboxPage() {
             <PageSpinner />
           ) : q.isError ? (
             <div className="p-4">
-              <Banner tone="danger" title={friendlyError(q.error)} />
+              <QueryError error={q.error} onRetry={() => q.refetch()} />
             </div>
           ) : items.length === 0 ? (
             <EmptyState
@@ -69,7 +68,7 @@ export default function InboxPage() {
           <div className="flex min-w-0 flex-col gap-4">
             <button
               onClick={() => select(null)}
-              className="inline-flex items-center gap-1 self-start text-label text-fg-link hover:underline lg:hidden"
+              className="inline-flex min-h-11 items-center gap-1 self-start text-label text-fg-link hover:underline lg:hidden"
             >
               <ChevronLeft aria-hidden className="size-4" /> Inbox
             </button>

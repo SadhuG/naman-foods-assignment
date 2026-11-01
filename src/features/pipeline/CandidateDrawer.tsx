@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
+import { QueryError } from "../../components/ui/QueryError";
 import { Check, Pause, RotateCcw, X } from "lucide-react";
 import { useState } from "react";
-import { Banner } from "../../components/ui/Banner";
 import { Button } from "../../components/ui/Button";
 import { Drawer } from "../../components/ui/Dialog";
 import { PageSpinner } from "../../components/ui/Spinner";
@@ -12,7 +12,6 @@ import {
   pipelineKeys,
   type CandidateDetail,
 } from "../../lib/api/candidates";
-import { friendlyError } from "../../lib/api/errors";
 import { formatPhone, shortDate, years } from "../../lib/copy";
 import { allowedDecisions, DECISION_LABEL } from "../../lib/pipeline";
 import type { Decision, Drive, DriveRound } from "../../lib/types";
@@ -132,7 +131,7 @@ export function CandidateDrawer({
             </span>
             <span className="flex items-center gap-2">
               <StatusChip status={c.status} />
-              <span className="rounded-sm bg-surface-sunken px-2 py-0.5 text-small">
+              <span className="rounded-sm bg-surface-sunken px-2 py-0.5 text-small text-neutral-700">
                 {c.user_id ? "Has account" : "Added by HR"}
               </span>
             </span>
@@ -170,7 +169,7 @@ export function CandidateDrawer({
       {detail.isPending ? (
         <PageSpinner />
       ) : detail.isError ? (
-        <Banner tone="danger" title={friendlyError(detail.error)} />
+        <QueryError error={detail.error} onRetry={() => detail.refetch()} />
       ) : (
         <div className="flex flex-col gap-6">
           <JoiningReview detail={d!} />

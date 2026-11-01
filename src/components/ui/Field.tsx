@@ -80,7 +80,7 @@ const control =
   "aria-invalid:border-border-danger aria-invalid:focus:ring-border-danger disabled:bg-surface-sunken disabled:text-fg-disabled";
 
 export function Input({ className, ...rest }: ComponentProps<"input">) {
-  return <input className={cn(control, "h-10", className)} {...rest} />;
+  return <input className={cn(control, "h-11 sm:h-10", className)} {...rest} />;
 }
 
 export function Textarea({ className, ...rest }: ComponentProps<"textarea">) {
@@ -97,7 +97,7 @@ export function Select({
   return (
     <div className="relative">
       <select
-        className={cn(control, "h-10 appearance-none pr-9", className)}
+        className={cn(control, "h-11 appearance-none pr-9 sm:h-10", className)}
         {...rest}
       >
         {children}

@@ -21,7 +21,8 @@ export function buttonClass(
 ) {
   return cn(
     "inline-flex items-center justify-center gap-2 rounded-md text-label whitespace-nowrap transition-colors",
-    size === "md" ? "h-9 px-4" : "h-8 px-3",
+    // 44 px tall on touch-sized screens, Figma's 36 px from sm up
+    size === "md" ? "h-11 px-4 sm:h-9" : "h-10 px-3 sm:h-8",
     VARIANTS[variant],
   );
 }

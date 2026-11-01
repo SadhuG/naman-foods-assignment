@@ -1,7 +1,7 @@
 import { Inbox, LogOut } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
-import { Avatar, Wordmark } from "../../components/ui/Brand";
+import { Avatar, initials, Wordmark } from "../../components/ui/Brand";
 import { cn } from "../../components/ui/cn";
 import { signOut, useAuth } from "../../lib/api/auth";
 
@@ -75,11 +75,11 @@ export function CandidateTopBar({ unread }: { unread?: boolean }) {
             <Link
               to="/me/inbox"
               aria-label={unread ? "Inbox, new messages" : "Inbox"}
-              className="relative rounded-md p-2 hover:bg-surface-sunken sm:hidden"
+              className="relative grid size-11 place-items-center rounded-md hover:bg-surface-sunken sm:hidden"
             >
               <Inbox className="size-5" />
               {unread && (
-                <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-accent-brand" />
+                <span className="absolute top-2.5 right-2.5 size-2 rounded-full bg-accent-brand" />
               )}
             </Link>
             <div ref={menu} className="relative">
@@ -87,8 +87,8 @@ export function CandidateTopBar({ unread }: { unread?: boolean }) {
                 onClick={() => setOpen((o) => !o)}
                 aria-haspopup="menu"
                 aria-expanded={open}
-                aria-label={`Account: ${name}`}
-                className="rounded-full"
+                aria-label={`${initials(name)}: account menu for ${name}`}
+                className="grid size-11 place-items-center rounded-full"
               >
                 <Avatar name={name} />
               </button>

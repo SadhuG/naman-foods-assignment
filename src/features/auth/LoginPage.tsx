@@ -128,7 +128,7 @@ export default function LoginPage() {
             <p className="text-small text-fg-secondary">
               New here?{" "}
               {next?.startsWith("/apply/") ? (
-                <Link to={next} className="text-fg-link hover:underline">
+                <Link to={next} className="text-fg-link underline">
                   Create an account and apply.
                 </Link>
               ) : (

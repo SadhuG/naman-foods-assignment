@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
+import { QueryError } from "../../components/ui/QueryError";
 import { BriefcaseBusiness, ChevronRight } from "lucide-react";
 import { Link } from "react-router";
-import { Banner } from "../../components/ui/Banner";
 import { Card, Overline } from "../../components/ui/Brand";
 import { cn } from "../../components/ui/cn";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { PageSpinner } from "../../components/ui/Spinner";
 import { StatusChip } from "../../components/ui/StatusChip";
 import { candidateKeys, listMyApplications } from "../../lib/api/candidate";
-import { friendlyError } from "../../lib/api/errors";
 import { firstName } from "../../lib/copy";
 import type { MyApplicationSummary } from "../../lib/types";
 import { CandidateShell, useDisplayName } from "./CandidateShell";
@@ -75,9 +74,11 @@ export default function MyApplicationsPage() {
         {apps.isPending ? (
           <PageSpinner />
         ) : apps.isError ? (
-          <Banner tone="danger" title="We couldn't load your applications.">
-            {friendlyError(apps.error)}
-          </Banner>
+          <QueryError
+            title="We couldn't load your applications."
+            error={apps.error}
+            onRetry={() => apps.refetch()}
+          />
         ) : apps.data.length === 0 ? (
           <Card>
             <EmptyState

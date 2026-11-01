@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { QueryError } from "../../components/ui/QueryError";
 import { Download, Inbox, Search } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 import { runExport } from "../export/ExportMenu";
@@ -11,14 +12,12 @@ import {
   sentAt,
 } from "../../components/messages/MessageList";
 import { SmsPreview } from "../../components/messages/SmsPreview";
-import { Banner } from "../../components/ui/Banner";
 import { Card } from "../../components/ui/Brand";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { Select } from "../../components/ui/Field";
 import { PageSpinner } from "../../components/ui/Spinner";
 import { StatusChip } from "../../components/ui/StatusChip";
 import { driveKeys, getDrive } from "../../lib/api/drives";
-import { friendlyError } from "../../lib/api/errors";
 import { listDriveMessages, messageKeys } from "../../lib/api/messages";
 import { formatPhone, plural } from "../../lib/copy";
 import { TEMPLATE_LABELS } from "../../lib/messages";
@@ -90,7 +89,7 @@ export default function OutboxPage() {
       {msgs.isPending ? (
         <PageSpinner />
       ) : msgs.isError ? (
-        <Banner tone="danger" title={friendlyError(msgs.error)} />
+        <QueryError error={msgs.error} onRetry={() => msgs.refetch()} />
       ) : (
         <div className="mt-6 grid items-start gap-6 lg:grid-cols-[420px_1fr]">
           <Card className="overflow-hidden">
@@ -158,7 +157,7 @@ export default function OutboxPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="rounded-sm bg-surface-sunken px-2 py-0.5 font-mono text-small text-fg-secondary">
+                  <span className="rounded-sm bg-surface-sunken px-2 py-0.5 font-mono text-small text-neutral-600">
                     {open.template}
                   </span>
                   <StatusChip status={open.candidate_status} />

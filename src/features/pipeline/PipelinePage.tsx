@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import { QueryError } from "../../components/ui/QueryError";
 import { Filter, Link2, Mail, Pencil, Search, Users } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
-import { Banner } from "../../components/ui/Banner";
 import { Button, buttonClass } from "../../components/ui/Button";
 import { Dialog } from "../../components/ui/Dialog";
 import { EmptyState } from "../../components/ui/EmptyState";
@@ -16,7 +16,6 @@ import {
   useCandidatesLive,
 } from "../../lib/api/candidates";
 import { driveKeys, getDrive } from "../../lib/api/drives";
-import { friendlyError } from "../../lib/api/errors";
 import { plural, shortDate } from "../../lib/copy";
 import {
   allowedDecisions,
@@ -116,11 +115,11 @@ export default function PipelinePage() {
   if (drive.isError)
     return (
       <HrShell>
-        <Banner tone="danger" title={friendlyError(drive.error)}>
-          <Link to="/" className="text-fg-link underline">
+        <QueryError error={drive.error} onRetry={() => drive.refetch()}>
+          <Link to="/" className="text-label text-fg-link underline">
             Back to drives
           </Link>
-        </Banner>
+        </QueryError>
       </HrShell>
     );
 
@@ -224,7 +223,7 @@ export default function PipelinePage() {
         {people.isPending ? (
           <PageSpinner />
         ) : people.isError ? (
-          <Banner tone="danger" title={friendlyError(people.error)} />
+          <QueryError error={people.error} onRetry={() => people.refetch()} />
         ) : rows.length === 0 ? (
           <div className="rounded-lg border border-border-default bg-surface-raised">
             <EmptyState

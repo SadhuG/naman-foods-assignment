@@ -29,7 +29,7 @@ export function EmailPreview({
     >
       <header className="border-b border-border-default px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <h3 className="text-title">{message.subject}</h3>
+          <h2 className="text-title">{message.subject}</h2>
           <DemoMarker />
         </div>
         <dl className="mt-1.5 text-small text-fg-secondary">
@@ -55,9 +55,9 @@ export function EmailPreview({
             </span>
             <span className="text-small text-fg-secondary">Careers</span>
           </p>
-          <h4 className="mt-5 text-[26px] leading-8 font-semibold tracking-[-0.02em] sm:text-[32px] sm:leading-10">
+          <h3 className="mt-5 text-[26px] leading-8 font-semibold tracking-[-0.02em] sm:text-[32px] sm:leading-10">
             {message.headline}
-          </h4>
+          </h3>
           <p className="mt-5 text-body">{message.greeting}</p>
           {message.paragraphs.map((p) => (
             <p key={p} className="mt-4 text-body">

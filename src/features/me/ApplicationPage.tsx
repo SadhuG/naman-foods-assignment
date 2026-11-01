@@ -41,7 +41,7 @@ export default function ApplicationPage() {
   const back = (
     <Link
       to="/me"
-      className="mb-4 inline-flex items-center gap-1 text-label text-fg-link hover:underline"
+      className="-my-3 mb-1 inline-flex min-h-11 items-center gap-1 text-label text-fg-link hover:underline"
     >
       <ChevronLeft aria-hidden className="size-4" /> My applications
     </Link>

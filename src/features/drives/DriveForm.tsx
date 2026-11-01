@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { QueryError } from "../../components/ui/QueryError";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Banner } from "../../components/ui/Banner";
 import { Button, buttonClass } from "../../components/ui/Button";
 import {
   Field,
@@ -68,11 +68,11 @@ export function EditDrivePage() {
   if (q.isError)
     return (
       <HrShell>
-        <Banner tone="danger" title={friendlyError(q.error)}>
-          <Link to="/" className="text-fg-link underline">
+        <QueryError error={q.error} onRetry={() => q.refetch()}>
+          <Link to="/" className="text-label text-fg-link underline">
             Back to drives
           </Link>
-        </Banner>
+        </QueryError>
       </HrShell>
     );
   return <DriveEditor existing={q.data} />;

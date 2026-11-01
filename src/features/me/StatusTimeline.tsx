@@ -8,7 +8,7 @@ const DOT: Record<StepState, string> = {
   current: "bg-accent-default text-fg-on-accent",
   on_hold: "bg-status-on_hold-bg text-status-on_hold-fg",
   rejected: "bg-status-rejected-bg text-status-rejected-fg",
-  upcoming: "bg-surface-sunken text-fg-secondary",
+  upcoming: "bg-surface-sunken text-neutral-600",
 };
 
 function describe(step: TimelineStep, prev: TimelineStep | undefined) {
