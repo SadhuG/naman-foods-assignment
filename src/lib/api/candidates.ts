@@ -104,3 +104,36 @@ export function useCandidatesLive(driveId: string): void {
     };
   }, [driveId, queryClient]);
 }
+
+export async function requestChanges(
+  candidateId: string,
+  reason: string,
+): Promise<void> {
+  const { error } = await supabase.rpc("hr_request_changes", {
+    p_candidate_id: candidateId,
+    p_reason: reason,
+  });
+  if (error) throw error;
+}
+
+export async function markOnboarded(candidateId: string): Promise<void> {
+  const { error } = await supabase.rpc("hr_mark_onboarded", {
+    p_candidate_id: candidateId,
+  });
+  if (error) throw error;
+}
+
+/** Joining-details progress for the Selected tab, keyed by candidate id. */
+export async function listChangeRequests(
+  driveId: string,
+): Promise<Set<string>> {
+  const { data, error } = await supabase
+    .from("joining_details")
+    .select(
+      "candidate_id, changes_requested_reason, candidates!inner(drive_id)",
+    )
+    .eq("candidates.drive_id", driveId)
+    .not("changes_requested_reason", "is", null);
+  if (error) throw error;
+  return new Set(data.map((r) => r.candidate_id));
+}

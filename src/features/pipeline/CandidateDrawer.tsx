@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Check, Pause, RotateCcw, X } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { Banner } from "../../components/ui/Banner";
 import { Button } from "../../components/ui/Button";
 import { Drawer } from "../../components/ui/Dialog";
@@ -17,6 +17,8 @@ import { formatPhone, shortDate, years } from "../../lib/copy";
 import { allowedDecisions, DECISION_LABEL } from "../../lib/pipeline";
 import type { Decision, Drive, DriveRound } from "../../lib/types";
 import { DecisionDialog } from "./DecisionDialog";
+import { DefinitionList, DrawerSection } from "./DrawerParts";
+import { JoiningActions, JoiningReview } from "./JoiningReview";
 import { describeMoveFor, useDecide } from "./useDecide";
 
 const DECISION_ICON: Record<Decision, [typeof Check, string]> = {
@@ -31,39 +33,6 @@ const DECISION_PAST: Record<Decision, string> = {
   rejected: "rejected",
   reopened: "reopened",
 };
-
-export function DrawerSection({
-  title,
-  aside,
-  children,
-}: {
-  title: string;
-  aside?: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <section className="border-t border-border-default pt-5">
-      <div className="mb-3 flex items-baseline justify-between gap-3">
-        <h3 className="text-title">{title}</h3>
-        {aside && <span className="text-small text-fg-secondary">{aside}</span>}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-export function DefinitionList({ rows }: { rows: Array<[string, ReactNode]> }) {
-  return (
-    <dl className="grid grid-cols-[150px_1fr] gap-x-4 gap-y-2 text-body">
-      {rows.map(([k, v]) => (
-        <div key={k} className="contents">
-          <dt className="text-small leading-[22px] text-fg-secondary">{k}</dt>
-          <dd className="min-w-0 break-words">{v}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
 
 function History({
   detail,
@@ -171,26 +140,30 @@ export function CandidateDrawer({
       }
       footer={
         c &&
-        actions.length > 0 && (
-          <>
-            {actions
-              .filter((a) => a !== "approved")
-              .map((a) => (
-                <Button
-                  key={a}
-                  variant={a === "rejected" ? "danger" : "secondary"}
-                  onClick={() => setDialog(a)}
-                >
-                  {DECISION_LABEL[a]}
+        (c.status === "selected" || c.status === "details_submitted" ? (
+          <JoiningActions detail={d!} />
+        ) : (
+          actions.length > 0 && (
+            <>
+              {actions
+                .filter((a) => a !== "approved")
+                .map((a) => (
+                  <Button
+                    key={a}
+                    variant={a === "rejected" ? "danger" : "secondary"}
+                    onClick={() => setDialog(a)}
+                  >
+                    {DECISION_LABEL[a]}
+                  </Button>
+                ))}
+              {actions.includes("approved") && (
+                <Button onClick={() => setDialog("approved")}>
+                  {DECISION_LABEL.approved}
                 </Button>
-              ))}
-            {actions.includes("approved") && (
-              <Button onClick={() => setDialog("approved")}>
-                {DECISION_LABEL.approved}
-              </Button>
-            )}
-          </>
-        )
+              )}
+            </>
+          )
+        ))
       }
     >
       {detail.isPending ? (
@@ -199,6 +172,7 @@ export function CandidateDrawer({
         <Banner tone="danger" title={friendlyError(detail.error)} />
       ) : (
         <div className="flex flex-col gap-6">
+          <JoiningReview detail={d!} />
           <DrawerSection title="Decisions" aside="Internal notes are HR-only">
             <History detail={d!} rounds={rounds} />
           </DrawerSection>

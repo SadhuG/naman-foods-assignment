@@ -10,6 +10,7 @@ import { PageSpinner } from "../../components/ui/Spinner";
 import { Tabs } from "../../components/ui/Tabs";
 import { cn } from "../../components/ui/cn";
 import {
+  listChangeRequests,
   listCandidates,
   pipelineKeys,
   useCandidatesLive,
@@ -23,6 +24,7 @@ import {
   filterByStage,
   matchesSearch,
 } from "../../lib/pipeline";
+import { joiningProgressLabel } from "../../lib/schemas";
 import type { Candidate, Decision, StageKey } from "../../lib/types";
 import { ShareDrive } from "../drives/ShareDrive";
 import { Breadcrumbs, HrShell } from "../hr/HrShell";
@@ -46,6 +48,12 @@ export default function PipelinePage() {
     queryFn: () => listCandidates(id),
   });
   useCandidatesLive(id);
+  const stageParam = params.get("stage") ?? "round-1";
+  const changes = useQuery({
+    queryKey: ["change-requests", id, people.dataUpdatedAt],
+    queryFn: () => listChangeRequests(id),
+    enabled: stageParam === "selected",
+  });
 
   const stage = (params.get("stage") ?? "round-1") as StageKey;
   const openId = params.get("c");
@@ -272,6 +280,12 @@ export default function PipelinePage() {
               setSelected(on ? new Set(rows.map((r) => r.id)) : new Set())
             }
             onOpen={(cid) => setParam("c", cid)}
+            joining={
+              stage === "selected"
+                ? (c) =>
+                    joiningProgressLabel(c.status, !!changes.data?.has(c.id))
+                : undefined
+            }
           />
         )}
       </div>

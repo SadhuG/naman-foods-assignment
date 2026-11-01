@@ -40,6 +40,7 @@ export function CandidateTable({
   onToggleAll,
   onOpen,
   fresh,
+  joining,
 }: {
   rows: Candidate[];
   selected: Set<string>;
@@ -48,6 +49,8 @@ export function CandidateTable({
   onOpen: (id: string) => void;
   /** Ids that arrived live, highlighted briefly. */
   fresh: Set<string>;
+  /** Selected tab: joining-details progress per candidate. */
+  joining?: (c: Candidate) => string;
 }) {
   const all = rows.length > 0 && rows.every((r) => selected.has(r.id));
   const some = rows.some((r) => selected.has(r.id));
@@ -74,6 +77,11 @@ export function CandidateTable({
             <th scope="col" className="py-2.5 font-normal">
               Status
             </th>
+            {joining && (
+              <th scope="col" className="py-2.5 font-normal">
+                Joining details
+              </th>
+            )}
             <th scope="col" className="py-2.5 font-normal">
               Applied
             </th>
@@ -128,6 +136,11 @@ export function CandidateTable({
                 <td className="py-3 pr-4">
                   <StatusChip status={c.status} />
                 </td>
+                {joining && (
+                  <td className="py-3 pr-4 text-small whitespace-nowrap">
+                    {joining(c)}
+                  </td>
+                )}
                 <td className="py-3 pr-4 font-mono text-mono whitespace-nowrap text-fg-secondary">
                   {shortDate(c.created_at)}
                 </td>
