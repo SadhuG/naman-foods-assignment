@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { MyApplication } from "../../lib/types";
-import { buildTimeline, latestNote } from "./progress";
+import type { MyApplication } from "../../../../src/lib/types";
+import {
+  buildTimeline,
+  latestNote,
+} from "../../../../src/features/me/progress";
 
 const rounds = [
   "Screening",

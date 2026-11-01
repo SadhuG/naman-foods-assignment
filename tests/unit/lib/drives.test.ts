@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_ROUNDS, driveSchema, slugify } from "./drives";
+import { DEFAULT_ROUNDS, driveSchema, slugify } from "../../../src/lib/drives";
 
 const valid = {
   title: "Production Associates",
@@ -40,7 +40,7 @@ describe("driveSchema", () => {
 
 describe("funnelFor", () => {
   it("counts people per round, then selected and rejected", async () => {
-    const { funnelFor } = await import("./drives");
+    const { funnelFor } = await import("../../../src/lib/drives");
     const rows = funnelFor(
       [
         { position: 1, name: "Screening" },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readEnv } from "./env";
+import { readEnv } from "../../../src/lib/env";
 
 const url = "https://abc.supabase.co";
 const key = "anon-key";

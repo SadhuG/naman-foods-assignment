@@ -56,7 +56,13 @@ Vite, React 19, TypeScript (strict), React Router, TanStack Query, react-hook-fo
 4. `npm run seed` creates the demo accounts and data. Run it again any time to reset.
 5. `npm run dev`
 
-Checks: `npm test` (unit), `npm run test:db` (integration tests against the database), `npx tsc -b`, `npx prettier --check .`
+Checks: `npm test` (unit), `npm run test:db` (integration tests against the database), `npm run test:e2e` (Playwright browser tests), `npx tsc -b`, `npx prettier --check .`
+
+All tests live in `tests/`:
+
+- `tests/unit/`: Vitest unit tests, mirroring `src/` and `scripts/`.
+- `tests/integration/`: the SQL functions and privacy rules, against the Supabase project in `.env.local`.
+- `tests/e2e/`: 60 browser tests on a 1440 px desktop and a 390 px phone, covering every flow plus double submits, dropped connections, two HR people deciding at once, 50-person bulk actions, CSV edge cases and accessibility (axe). Run `npx playwright install chromium` once. A run reseeds the demo data first (skip with `E2E_SKIP_SEED=1`) and deletes everything it creates. Supabase allows about 30 logins per 5 minutes from one machine, so leave about 5 minutes between runs of `test:db` and `test:e2e`.
 
 ## Next steps
 

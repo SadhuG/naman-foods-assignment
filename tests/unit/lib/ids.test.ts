@@ -7,7 +7,7 @@ import {
   normalizePan,
   normalizePhone,
   normalizeUan,
-} from "./ids";
+} from "../../../src/lib/ids";
 
 describe("normalizePhone", () => {
   it("strips +91, spaces and dashes", () => {

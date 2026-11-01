@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { renderMessage, TEMPLATE_LABELS } from "./messages";
-import { MESSAGE_TEMPLATES, type MessageParams } from "./types";
+import { renderMessage, TEMPLATE_LABELS } from "../../../src/lib/messages";
+import { MESSAGE_TEMPLATES, type MessageParams } from "../../../src/lib/types";
 
 const ctx = { appUrl: "https://hire.example", candidateId: "c-123" };
 const base: MessageParams = {

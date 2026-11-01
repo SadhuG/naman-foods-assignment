@@ -7,8 +7,8 @@ import {
   matchesSearch,
   nextStageLabel,
   stageOf,
-} from "./pipeline";
-import type { Candidate, DriveRound } from "./types";
+} from "../../../src/lib/pipeline";
+import type { Candidate, DriveRound } from "../../../src/lib/types";
 
 const rounds = (n: number): DriveRound[] =>
   ["Screening", "Aptitude Test", "Technical Interview", "HR Interview"]

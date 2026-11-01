@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEMO_ACCOUNTS } from "../src/lib/demo";
+import { DEMO_ACCOUNTS } from "../../../src/lib/demo";
 import {
   normalizeAadhaar,
   normalizeAccountNumber,
@@ -7,8 +7,8 @@ import {
   normalizePan,
   normalizePhone,
   normalizeUan,
-} from "../src/lib/ids";
-import { buildDemoDataset, stepsFor } from "./demo-data";
+} from "../../../src/lib/ids";
+import { buildDemoDataset, stepsFor } from "../../../scripts/demo-data";
 
 const data = buildDemoDataset();
 const [A, B] = data.drives;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { friendlyError } from "./errors";
+import { friendlyError } from "../../../../src/lib/api/errors";
 
 describe("friendlyError", () => {
   it("maps SQL codes", () => {

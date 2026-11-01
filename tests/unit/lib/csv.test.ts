@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { csvFilename, toCsv } from "./csv";
+import { csvFilename, toCsv } from "../../../src/lib/csv";
 
 const one = (cell: Parameters<typeof toCsv>[1][number][number]) =>
   toCsv(["h"], [[cell]]).slice("﻿h\r\n".length);

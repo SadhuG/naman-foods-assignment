@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { accountSchema, applySchema } from "./schemas";
+import { accountSchema, applySchema } from "../../../src/lib/schemas";
 
 const base = {
   full_name: "Riya Sen",
@@ -46,7 +46,8 @@ describe("accountSchema", () => {
 });
 
 describe("joiningSchema", async () => {
-  const { joiningSchema, joiningProgressLabel } = await import("./schemas");
+  const { joiningSchema, joiningProgressLabel } =
+    await import("../../../src/lib/schemas");
   const iso = (days: number) => {
     const d = new Date();
     d.setDate(d.getDate() + days);

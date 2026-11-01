@@ -2,3 +2,5 @@ docs/plan/
 .superpowers/
 dist
 package-lock.json
+test-results
+playwright-report
