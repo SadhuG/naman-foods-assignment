@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, SearchX } from "lucide-react";
-import type { ReactNode } from "react";
 import { Link, useParams } from "react-router";
-import { Banner } from "../../components/ui/Banner";
 import { Card, Overline } from "../../components/ui/Brand";
 import { buttonClass } from "../../components/ui/Button";
 import { EmptyState } from "../../components/ui/EmptyState";
@@ -12,8 +10,8 @@ import { candidateKeys, getMyApplication } from "../../lib/api/candidate";
 import { friendlyError } from "../../lib/api/errors";
 import { formatPhone, shortDate, years } from "../../lib/copy";
 import { supabase } from "../../lib/supabase";
-import type { MyApplication } from "../../lib/types";
 import { CandidateShell } from "./CandidateShell";
+import { JoiningSection } from "./JoiningForm";
 import { buildTimeline, latestNote } from "./progress";
 import { StatusTimeline } from "./StatusTimeline";
 
@@ -25,16 +23,6 @@ async function getProfile(id: string) {
     .maybeSingle();
   if (error) throw error;
   return data;
-}
-
-/** Slot below the timeline once a candidate is selected. Phase 08 fills it with the joining form. */
-export function SelectedSlot({ app }: { app: MyApplication }): ReactNode {
-  return (
-    <Banner tone="success" title="You've been selected">
-      Next, share your joining details with the Naman Foods HR team.
-      {app.joining_details ? " Your details are with HR." : ""}
-    </Banner>
-  );
 }
 
 export default function ApplicationPage() {
@@ -107,7 +95,7 @@ export default function ApplicationPage() {
       </div>
 
       <div className="mt-6 flex flex-col gap-4">
-        {selected && <SelectedSlot app={a} />}
+        {selected && <JoiningSection app={a} />}
         <Card className="p-4">
           <h2 className="mb-4 text-title">Your progress</h2>
           <StatusTimeline steps={steps} />

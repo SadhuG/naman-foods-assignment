@@ -1,4 +1,4 @@
-import type { ApplyInput } from "../schemas";
+import type { ApplyInput, JoiningInput } from "../schemas";
 import { supabase } from "../supabase";
 import type {
   MyApplication,
@@ -64,3 +64,14 @@ export const candidateKeys = {
   one: (id: string) => ["my-application", id] as const,
   profile: ["my-profile"] as const,
 };
+
+export async function submitJoiningDetails(
+  candidateId: string,
+  input: JoiningInput,
+): Promise<void> {
+  const { error } = await supabase.rpc("submit_joining_details", {
+    p_candidate_id: candidateId,
+    p_details: input,
+  });
+  if (error) throw error;
+}
