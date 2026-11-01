@@ -126,9 +126,11 @@ export type MyApplicationSummary = {
   candidate_id: string;
   drive_title: string;
   role: string;
+  location: string;
   status: CandidateStatus;
   current_round: number;
   current_round_name: string | null;
+  next_round_name: string | null;
   total_rounds: number;
   applied_at: string;
 };
