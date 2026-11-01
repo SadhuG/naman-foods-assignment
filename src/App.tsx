@@ -6,6 +6,8 @@ import { buttonClass } from "./components/ui/Button";
 import { EmptyState } from "./components/ui/EmptyState";
 import { PageSpinner } from "./components/ui/Spinner";
 import ApplyPage from "./features/apply/ApplyPage";
+import { EditDrivePage, NewDrivePage } from "./features/drives/DriveForm";
+import DrivesPage from "./features/drives/DrivesPage";
 import LoginPage from "./features/auth/LoginPage";
 import { RequireRole } from "./features/auth/RequireRole";
 import ApplicationPage from "./features/me/ApplicationPage";
@@ -62,19 +64,13 @@ export default function App() {
             path="/me/inbox"
             element={candidate(<Placeholder title="Inbox" />)}
           />
-          <Route path="/" element={hr(<Placeholder title="Drives" />)} />
-          <Route
-            path="/drives/new"
-            element={hr(<Placeholder title="New drive" />)}
-          />
+          <Route path="/" element={hr(<DrivesPage />)} />
+          <Route path="/drives/new" element={hr(<NewDrivePage />)} />
           <Route
             path="/drives/:id"
             element={hr(<Placeholder title="Pipeline" />)}
           />
-          <Route
-            path="/drives/:id/edit"
-            element={hr(<Placeholder title="Edit drive" />)}
-          />
+          <Route path="/drives/:id/edit" element={hr(<EditDrivePage />)} />
           <Route
             path="/drives/:id/outbox"
             element={hr(<Placeholder title="Outbox" />)}

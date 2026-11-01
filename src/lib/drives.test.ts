@@ -36,3 +36,30 @@ describe("driveSchema", () => {
     expect(driveSchema.safeParse({ ...valid, ...over }).success).toBe(false);
   });
 });
+
+describe("funnelFor", () => {
+  it("counts people per round, then selected and rejected", async () => {
+    const { funnelFor } = await import("./drives");
+    const rows = funnelFor(
+      [
+        { position: 1, name: "Screening" },
+        { position: 2, name: "Aptitude Test" },
+      ],
+      [
+        { status: "active", current_round: 1 },
+        { status: "on_hold", current_round: 1 },
+        { status: "active", current_round: 2 },
+        { status: "rejected", current_round: 2 },
+        { status: "selected", current_round: 2 },
+        { status: "details_submitted", current_round: 2 },
+        { status: "onboarded", current_round: 2 },
+      ],
+    );
+    expect(rows.map((r) => [r.label, r.count])).toEqual([
+      ["Screening", 2],
+      ["Aptitude Test", 1],
+      ["Selected", 3],
+      ["Rejected", 1],
+    ]);
+  });
+});

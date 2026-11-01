@@ -11,6 +11,8 @@ const COPY: Record<string, string> = {
   not_authenticated: "Please sign in again.",
   reason_required: "Tell the candidate what to change.",
   invalid_decision: "That action isn't available.",
+  rounds_locked: "Rounds are locked once candidates have applied.",
+  invalid_rounds: "Give each round its own name (1 to 8 rounds).",
   "User already registered":
     "An account with this email already exists. Sign in to apply.",
   "Invalid login credentials": "Email or password is incorrect.",

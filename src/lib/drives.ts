@@ -63,3 +63,47 @@ export const driveSchema = z.object({
 });
 export type DriveInput = z.output<typeof driveSchema>;
 export type DriveFormValues = z.input<typeof driveSchema>;
+
+export type FunnelRow = {
+  key: string;
+  label: string;
+  count: number;
+  kind: "round" | "selected" | "rejected";
+};
+
+const SELECTED = new Set(["selected", "details_submitted", "onboarded"]);
+
+/** People waiting in each round (active or on hold), then everyone selected, then rejected. */
+export function funnelFor(
+  rounds: Array<{ position: number; name: string }>,
+  candidates: Array<{ status: string; current_round: number }>,
+): FunnelRow[] {
+  const inRound = (p: number) =>
+    candidates.filter(
+      (c) =>
+        c.current_round === p &&
+        (c.status === "active" || c.status === "on_hold"),
+    ).length;
+  return [
+    ...[...rounds]
+      .sort((a, b) => a.position - b.position)
+      .map((r) => ({
+        key: `round-${r.position}`,
+        label: r.name,
+        count: inRound(r.position),
+        kind: "round" as const,
+      })),
+    {
+      key: "selected",
+      label: "Selected",
+      count: candidates.filter((c) => SELECTED.has(c.status)).length,
+      kind: "selected",
+    },
+    {
+      key: "rejected",
+      label: "Rejected",
+      count: candidates.filter((c) => c.status === "rejected").length,
+      kind: "rejected",
+    },
+  ];
+}

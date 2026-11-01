@@ -354,6 +354,20 @@ export type Database = {
         Args: { p_candidate_id: string; p_reason: string };
         Returns: undefined;
       };
+      hr_save_drive: {
+        Args: {
+          p_description: string;
+          p_drive_id: string;
+          p_location: string;
+          p_openings: number;
+          p_role: string;
+          p_rounds: string[];
+          p_slug: string;
+          p_status: string;
+          p_title: string;
+        };
+        Returns: string;
+      };
       is_hr: { Args: Record<PropertyKey, never>; Returns: boolean };
       list_my_applications: { Args: Record<PropertyKey, never>; Returns: Json };
       submit_joining_details: {
