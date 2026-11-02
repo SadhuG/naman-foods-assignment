@@ -64,3 +64,23 @@ test("login and the demo box fit a phone screen", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
   await expectNoSideways(page);
 });
+
+test("the landing and notes pages fit a phone", async ({ page }) => {
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", { level: 1, name: /47 applied/ }),
+  ).toBeVisible();
+  await expectNoSideways(page);
+  // The site nav keeps only Sign in; the notes link moves to the footer.
+  await expect(
+    page.getByRole("navigation", { name: "Site" }).getByRole("link", {
+      name: "Submission notes",
+    }),
+  ).toBeHidden();
+  await page.getByRole("link", { name: "Read the submission notes" }).click();
+  await expect(page).toHaveURL("/notes");
+  await expect(
+    page.getByRole("navigation", { name: "On this page" }),
+  ).toBeHidden();
+  await expectNoSideways(page);
+});

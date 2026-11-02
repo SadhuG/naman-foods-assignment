@@ -9,16 +9,16 @@ import { signOut } from "../../lib/api/auth";
 export function HrShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const onDrives = pathname === "/" || pathname.startsWith("/drives");
+  const onDrives = pathname.startsWith("/drives");
   return (
     <div className="min-h-dvh">
       <header className="sticky top-0 z-30 border-b border-border-default bg-surface-raised">
         <div className="flex h-17 items-center gap-6 px-8">
-          <Wordmark to="/" />
+          <Wordmark to="/drives" />
           <nav aria-label="HR">
             {/* every HR page lives under Drives */}
             <Link
-              to="/"
+              to="/drives"
               aria-current={onDrives ? "page" : undefined}
               className={cn(
                 "rounded-md px-3 py-2 text-label",

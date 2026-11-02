@@ -16,15 +16,16 @@ All three share the password **`Shortlist#2026`**. The login page also has one-t
 
 Demo data resets whenever `npm run seed` runs.
 
-## Try it in 3 minutes
+## Try it in 4 minutes
 
-1. **Sign in as HR.** The Drives page shows each drive's funnel. Open **Walk-in drive: Production Associates**.
-2. **Move a few candidates.** In the **1 · Screening** tab, tick three people and choose **Approve to Aptitude Test**. Add an internal note (HR only) and a message to the candidates, and watch the email preview update as you type. Confirm, and the toast reports how many moved.
-3. **Open the Outbox** from the drive header. The newest messages are the three emails and SMS you just sent, plus every earlier one.
-4. **Sign in as Aarav** (on a phone-sized window if you can). **My applications** shows him in round 3. **Inbox** shows each email and SMS he was sent.
-5. **Sign in as Meera.** Her application says she's selected. Fill in the joining details: loosely typed IDs like `abcde1234f` or `2345 6789 0123` are accepted and cleaned up. Submit.
-6. **Back as HR,** open the **Selected** tab, click Meera, check her details (IDs are masked until you reveal them), and choose **Mark onboarded**. You could also **Request changes** with a reason, which she sees as a banner.
-7. **Export** with **Export CSV → Full report**. It opens cleanly in Excel and Google Sheets.
+1. **Open the app.** The landing page (`/`) shows the demo drive's funnel; **Try the HR demo** signs you straight in. Reviewers can also read the submission notes at `/notes`.
+2. **Sign in as HR.** The Drives page (`/drives`) shows each drive's funnel. Open **Walk-in drive: Production Associates**.
+3. **Move a few candidates.** In the **1 · Screening** tab, tick three people and choose **Approve to Aptitude Test**. Add an internal note (HR only) and a message to the candidates, and watch the email preview update as you type. Confirm, and the toast reports how many moved.
+4. **Open the Outbox** from the drive header. The newest messages are the three emails and SMS you just sent, plus every earlier one.
+5. **Sign in as Aarav** (on a phone-sized window if you can). **My applications** shows him in round 3. **Inbox** shows each email and SMS he was sent.
+6. **Sign in as Meera.** Her application says she's selected. Fill in the joining details: loosely typed IDs like `abcde1234f` or `2345 6789 0123` are accepted and cleaned up. Submit.
+7. **Back as HR,** open the **Selected** tab, click Meera, check her details (IDs are masked until you reveal them), and choose **Mark onboarded**. You could also **Request changes** with a reason, which she sees as a banner.
+8. **Export** with **Export CSV → Full report**. It opens cleanly in Excel and Google Sheets.
 
 ## What the brief asked for, and where it is
 

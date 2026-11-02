@@ -41,6 +41,12 @@ async function audit(page: Page, label: string) {
 
 test("public and candidate pages", async ({ page, pageAs }) => {
   const drive = await createDrive();
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await audit(page, "landing");
+  await page.goto("/notes");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await audit(page, "submission notes");
   await page.goto("/login");
   await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
   await audit(page, "login");
@@ -73,7 +79,7 @@ test("HR pages and dialogs", async ({ hrPage: page }) => {
     { full_name: "Axe One" },
     { full_name: "Axe Two", status: "on_hold" },
   ]);
-  await page.goto("/");
+  await page.goto("/drives");
   await expect(page.getByText("Waiting on you")).toBeVisible();
   await audit(page, "drives");
   await page.goto(`/drives/${drive.id}`);

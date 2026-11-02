@@ -161,7 +161,7 @@ function OpenDrive({ slug, drive }: { slug: string; drive: PublicDrive }) {
       <Banner title="You're signed in as HR">
         Candidates apply here. To try it, open this link in a private window or
         log out first.{" "}
-        <Link to="/" className="text-fg-link underline">
+        <Link to="/drives" className="text-fg-link underline">
           Back to drives
         </Link>
       </Banner>

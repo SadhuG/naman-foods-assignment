@@ -116,7 +116,7 @@ export default function PipelinePage() {
     return (
       <HrShell>
         <QueryError error={drive.error} onRetry={() => drive.refetch()}>
-          <Link to="/" className="text-label text-fg-link underline">
+          <Link to="/drives" className="text-label text-fg-link underline">
             Back to drives
           </Link>
         </QueryError>
@@ -138,7 +138,7 @@ export default function PipelinePage() {
 
   return (
     <HrShell>
-      <Breadcrumbs items={[["Drives", "/"], [d.title]]} />
+      <Breadcrumbs items={[["Drives", "/drives"], [d.title]]} />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-display">{d.title}</h1>

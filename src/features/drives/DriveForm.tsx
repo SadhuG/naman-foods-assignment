@@ -69,7 +69,7 @@ export function EditDrivePage() {
     return (
       <HrShell>
         <QueryError error={q.error} onRetry={() => q.refetch()}>
-          <Link to="/" className="text-label text-fg-link underline">
+          <Link to="/drives" className="text-label text-fg-link underline">
             Back to drives
           </Link>
         </QueryError>
@@ -135,7 +135,7 @@ function DriveEditor({
     <HrShell>
       <Breadcrumbs
         items={[
-          ["Drives", "/"],
+          ["Drives", "/drives"],
           ...(d ? [[d.title, `/drives/${d.id}`] as [string, string]] : []),
           [d ? "Edit" : "New drive"],
         ]}
@@ -151,7 +151,7 @@ function DriveEditor({
           </div>
           <div className="flex gap-2">
             <Link
-              to={d ? `/drives/${d.id}` : "/"}
+              to={d ? `/drives/${d.id}` : "/drives"}
               className={buttonClass("ghost")}
             >
               Cancel

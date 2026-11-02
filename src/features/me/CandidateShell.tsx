@@ -46,7 +46,7 @@ export function CandidateTopBar({ unread }: { unread?: boolean }) {
   return (
     <header className="sticky top-0 z-30 border-b border-border-default bg-surface-raised">
       <div className="mx-auto flex h-17 max-w-6xl items-center gap-2 px-4 lg:px-16">
-        <Wordmark to={candidate ? "/me" : role === "hr" ? "/" : "/login"} />
+        <Wordmark to={candidate ? "/me" : role === "hr" ? "/drives" : "/"} />
         <div className="flex-1" />
         {candidate && (
           <>

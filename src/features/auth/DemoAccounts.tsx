@@ -1,18 +1,19 @@
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Avatar } from "../../components/ui/Brand";
+import { cn } from "../../components/ui/cn";
 import { FieldError } from "../../components/ui/Field";
 import { Spinner } from "../../components/ui/Spinner";
 import { friendlyError } from "../../lib/api/errors";
 import { DEMO_ACCOUNTS, type DemoAccount } from "../../lib/demo";
 
-/** "Try the demo" box: one tap signs in as a demo account. Shown only when VITE_DEMO_PASSWORD is set. */
-export function DemoAccounts({
-  password,
+/** One button per demo account; a tap signs in. Used on the login and landing pages. */
+export function DemoAccountList({
   onSignIn,
+  className,
 }: {
-  password: string;
   onSignIn: (account: DemoAccount) => Promise<void>;
+  className?: string;
 }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -29,22 +30,8 @@ export function DemoAccounts({
   }
 
   return (
-    <section
-      aria-labelledby="demo-title"
-      className="rounded-lg border border-accent-soft-strong bg-surface-brand p-4"
-    >
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="demo-title" className="text-title">
-          Try the demo
-        </h2>
-        <p className="font-mono text-small text-fg-secondary">
-          Password: {password}
-        </p>
-      </div>
-      <p className="mt-1 text-small text-fg-secondary">
-        One tap logs you in. Demo accounts reset when the demo data is reseeded.
-      </p>
-      <ul className="mt-3 flex flex-col gap-2">
+    <div className={className}>
+      <ul className="flex flex-col gap-2">
         {DEMO_ACCOUNTS.map((a) => (
           <li key={a.email}>
             <button
@@ -76,6 +63,40 @@ export function DemoAccounts({
           <FieldError>{error}</FieldError>
         </div>
       )}
+    </div>
+  );
+}
+
+/** "Try the demo" box on the login page. Shown only when VITE_DEMO_PASSWORD is set. */
+export function DemoAccounts({
+  password,
+  onSignIn,
+  className,
+}: {
+  password: string;
+  onSignIn: (account: DemoAccount) => Promise<void>;
+  className?: string;
+}) {
+  return (
+    <section
+      aria-labelledby="demo-title"
+      className={cn(
+        "rounded-lg border border-accent-soft-strong bg-surface-brand p-4",
+        className,
+      )}
+    >
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 id="demo-title" className="text-title">
+          Try the demo
+        </h2>
+        <p className="font-mono text-small text-fg-secondary">
+          Password: {password}
+        </p>
+      </div>
+      <p className="mt-1 text-small text-fg-secondary">
+        One tap logs you in. Demo accounts reset when the demo data is reseeded.
+      </p>
+      <DemoAccountList onSignIn={onSignIn} className="mt-3" />
     </section>
   );
 }

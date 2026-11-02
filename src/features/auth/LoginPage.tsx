@@ -61,7 +61,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-2">
       <aside className="hidden flex-col justify-between bg-surface-brand p-16 lg:flex">
-        <Wordmark to="/login" />
+        <Wordmark to="/" />
         <div>
           <h1 className="text-[32px] leading-10 font-semibold tracking-[-0.02em]">
             Hiring drives for Naman Foods.
@@ -85,7 +85,7 @@ export default function LoginPage() {
 
       <div className="flex flex-col">
         <header className="border-b border-border-default bg-surface-raised px-4 py-3 lg:hidden">
-          <Wordmark to="/login" />
+          <Wordmark to="/" />
         </header>
         <main className="mx-auto flex w-full max-w-100 flex-1 flex-col justify-center gap-6 px-4 py-8 lg:py-16">
           <div>

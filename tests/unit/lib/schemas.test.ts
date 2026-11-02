@@ -48,16 +48,22 @@ describe("accountSchema", () => {
 describe("joiningSchema", async () => {
   const { joiningSchema, joiningProgressLabel } =
     await import("../../../src/lib/schemas");
+  // Local calendar dates, as the app compares them (toISOString would be UTC and
+  // a day behind between midnight and 05:30 in India).
+  const local = (d: Date) => {
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  };
   const iso = (days: number) => {
     const d = new Date();
     d.setDate(d.getDate() + days);
-    return d.toISOString().slice(0, 10);
+    return local(d);
   };
   const yearsAgo = (y: number, extraDays = 0) => {
     const d = new Date();
     d.setFullYear(d.getFullYear() - y);
     d.setDate(d.getDate() + extraDays);
-    return d.toISOString().slice(0, 10);
+    return local(d);
   };
   const sample = {
     date_of_birth: "1999-07-09",

@@ -7,7 +7,7 @@ import {
 import { expect, test } from "./support/fixtures.ts";
 
 test.describe("signed out", () => {
-  for (const path of ["/", "/me", "/me/inbox", "/drives/new"]) {
+  for (const path of ["/drives", "/me", "/me/inbox", "/drives/new"]) {
     test(`${path} sends you to log in and remembers where you were`, async ({
       page,
     }) => {
@@ -43,7 +43,10 @@ test.describe("signed out", () => {
     await page.goto("/definitely/not/here");
     await expect(page.getByText("Page not found")).toBeVisible();
     await page.getByRole("link", { name: "Go home" }).click();
-    await expect(page).toHaveURL(/\/login/);
+    await expect(page).toHaveURL("/");
+    await expect(
+      page.getByRole("heading", { level: 1, name: /47 applied/ }),
+    ).toBeVisible();
   });
 });
 
@@ -65,7 +68,7 @@ test("HR logs in from a deep link and lands back on it", async ({ page }) => {
 
 test("a ?next= pointing off-site is ignored", async ({ hrPage }) => {
   await hrPage.goto("/login?next=//evil.example.com/steal");
-  await expect(hrPage).toHaveURL("/");
+  await expect(hrPage).toHaveURL("/drives");
   await expect(
     hrPage.getByRole("heading", { name: "Drives", exact: true }),
   ).toBeVisible();
@@ -73,13 +76,16 @@ test("a ?next= pointing off-site is ignored", async ({ hrPage }) => {
 
 test("each role is kept to its own pages", async ({ hrPage, pageAs }) => {
   await hrPage.goto("/me");
-  await expect(hrPage).toHaveURL("/");
+  await expect(hrPage).toHaveURL("/drives");
   await hrPage.goto("/me/inbox");
-  await expect(hrPage).toHaveURL("/");
+  await expect(hrPage).toHaveURL("/drives");
+  // Signed in, the landing page sends each role to its own home.
+  await hrPage.goto("/");
+  await expect(hrPage).toHaveURL("/drives");
 
   const cand = await createUser("Ritu Saini");
   const page = await pageAs(await sessionFor(cand));
-  for (const path of ["/", "/drives/new", "/drives/abc/outbox"]) {
+  for (const path of ["/", "/drives", "/drives/new", "/drives/abc/outbox"]) {
     await page.goto(path);
     await expect(page).toHaveURL("/me");
   }
@@ -94,13 +100,13 @@ test("signing out ends the session and protected pages need a login again", asyn
   // Its own HR account: signing out revokes the session everywhere.
   const hr = await createUser("HR team", { hr: true });
   const page = await pageAs(await sessionFor(hr));
-  await page.goto("/");
+  await page.goto("/drives");
   await expect(
     page.getByRole("heading", { name: "Drives", exact: true }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Sign out" }).click();
   await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
-  await page.goto("/");
+  await page.goto("/drives");
   await expect(page).toHaveURL(/\/login\?next=/);
 });
 
@@ -138,7 +144,7 @@ test.describe("demo accounts", () => {
   }) => {
     await page.goto("/login");
     await page.getByRole("button", { name: /HR team/ }).click();
-    await expect(page).toHaveURL("/");
+    await expect(page).toHaveURL("/drives");
     await expect(
       page.getByRole("heading", {
         name: "Walk-in drive: Production Associates",

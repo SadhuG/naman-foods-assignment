@@ -13,6 +13,8 @@ import { RequireRole } from "./features/auth/RequireRole";
 import ApplicationPage from "./features/me/ApplicationPage";
 import { CandidateShell } from "./features/me/CandidateShell";
 import InboxPage from "./features/me/InboxPage";
+import LandingPage from "./features/landing/LandingPage";
+import NotesPage from "./features/notes/NotesPage";
 import MyApplicationsPage from "./features/me/MyApplicationsPage";
 import OutboxPage from "./features/outbox/OutboxPage";
 import PipelinePage from "./features/pipeline/PipelinePage";
@@ -56,7 +58,9 @@ export default function App() {
             element={candidate(<ApplicationPage />)}
           />
           <Route path="/me/inbox" element={candidate(<InboxPage />)} />
-          <Route path="/" element={hr(<DrivesPage />)} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/notes" element={<NotesPage />} />
+          <Route path="/drives" element={hr(<DrivesPage />)} />
           <Route path="/drives/new" element={hr(<NewDrivePage />)} />
           <Route path="/drives/:id" element={hr(<PipelinePage />)} />
           <Route path="/drives/:id/edit" element={hr(<EditDrivePage />)} />

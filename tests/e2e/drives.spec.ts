@@ -5,7 +5,7 @@ test("HR creates a drive with custom rounds and gets a share link and QR", async
   hrPage: page,
 }) => {
   const title = `Test drive: Packing Line ${rand(2)}`;
-  await page.goto("/");
+  await page.goto("/drives");
   await page.getByRole("link", { name: "New drive" }).first().click();
   await expect(page).toHaveURL("/drives/new");
   await expect(
@@ -180,7 +180,7 @@ test("the dashboard funnel links into the right pipeline stage", async ({
     { full_name: "Three Aptitude", current_round: 2, status: "on_hold" },
     { full_name: "Four Rejected", status: "rejected" },
   ]);
-  await page.goto("/");
+  await page.goto("/drives");
   const card = page.getByRole("article").filter({ hasText: drive.title });
   await expect(card).toContainText(/4\s*candidates · 1 on hold/);
   await card.getByRole("link", { name: "Aptitude Test" }).click();
