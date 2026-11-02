@@ -8,6 +8,7 @@ import {
   type SupabaseClient,
 } from "@supabase/supabase-js";
 import { randomBytes } from "node:crypto";
+import { DEFAULT_DEMO_PASSWORD } from "../../../src/lib/demo.ts";
 
 try {
   process.loadEnvFile(".env.local");
@@ -25,7 +26,8 @@ if (!url || !anonKey || !serviceKey) {
 }
 
 export const BASE_URL = "http://localhost:5188";
-export const DEMO_PASSWORD = process.env.DEMO_PASSWORD ?? "";
+export const DEMO_PASSWORD =
+  process.env.DEMO_PASSWORD?.trim() || DEFAULT_DEMO_PASSWORD;
 /** Where supabase-js keeps the session in localStorage. */
 export const STORAGE_KEY = `sb-${new URL(url).hostname.split(".")[0]}-auth-token`;
 

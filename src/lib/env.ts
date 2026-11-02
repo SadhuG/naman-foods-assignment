@@ -1,3 +1,5 @@
+import { DEFAULT_DEMO_PASSWORD } from "./demo";
+
 export type AppEnv = {
   supabaseUrl: string;
   supabaseAnonKey: string;
@@ -34,8 +36,7 @@ export function readEnv(source: Source): AppEnv {
     throw new Error(
       `Missing VITE_SUPABASE_ANON_KEY (or ${KEY_NAMES.slice(1).join(", ")})`,
     );
-  const demoPassword = pick(source, ["VITE_DEMO_PASSWORD"]);
-  return demoPassword
-    ? { supabaseUrl, supabaseAnonKey, demoPassword }
-    : { supabaseUrl, supabaseAnonKey };
+  const demoPassword =
+    pick(source, ["VITE_DEMO_PASSWORD"]) ?? DEFAULT_DEMO_PASSWORD;
+  return { supabaseUrl, supabaseAnonKey, demoPassword };
 }

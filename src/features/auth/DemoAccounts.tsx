@@ -67,7 +67,7 @@ export function DemoAccountList({
   );
 }
 
-/** "Try the demo" box on the login page. Shown only when VITE_DEMO_PASSWORD is set. */
+/** "Try the demo" box on the login page. Uses VITE_DEMO_PASSWORD, else the built-in demo password. */
 export function DemoAccounts({
   password,
   onSignIn,

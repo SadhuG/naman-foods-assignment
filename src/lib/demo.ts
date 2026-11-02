@@ -1,5 +1,8 @@
-// The three demo accounts. They share one password (DEMO_PASSWORD on the
-// server, VITE_DEMO_PASSWORD in the browser's demo box).
+// The three demo accounts. They share one password. It is public on purpose
+// (README, login page), so it ships in the app; DEMO_PASSWORD (seed) and
+// VITE_DEMO_PASSWORD (browser) override it.
+export const DEFAULT_DEMO_PASSWORD = "Shortlist#2026";
+
 export type DemoAccount = {
   role: "hr" | "candidate";
   email: string;

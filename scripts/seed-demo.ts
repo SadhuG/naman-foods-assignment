@@ -3,7 +3,7 @@
 // three demo users. Needs SUPABASE_URL, VITE_SUPABASE_ANON_KEY,
 // SUPABASE_SERVICE_ROLE_KEY and DEMO_PASSWORD in .env.local.
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { DEMO_ACCOUNTS } from "../src/lib/demo";
+import { DEFAULT_DEMO_PASSWORD, DEMO_ACCOUNTS } from "../src/lib/demo";
 import { buildDemoDataset, stepsFor, type DemoCandidate } from "./demo-data";
 
 try {
@@ -15,7 +15,7 @@ try {
 const url = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
 const anonKey = process.env.VITE_SUPABASE_ANON_KEY;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const password = process.env.DEMO_PASSWORD;
+const password = process.env.DEMO_PASSWORD?.trim() || DEFAULT_DEMO_PASSWORD;
 if (!url || !anonKey || !serviceKey || !password) {
   throw new Error(
     "Missing SUPABASE_URL / VITE_SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY / DEMO_PASSWORD",
